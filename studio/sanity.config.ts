@@ -6,7 +6,7 @@ import { schemaTypes } from './schemaTypes';
 export default defineConfig({
   name: 'odff',
   title: 'odff',
-  projectId: process.env.SANITY_STUDIO_PROJECT_ID || 'your-project-id',
+  projectId: process.env.SANITY_STUDIO_PROJECT_ID || 've8m6jwu',
   dataset: process.env.SANITY_STUDIO_DATASET || 'production',
   plugins: [
     structureTool(),

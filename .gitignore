@@ -27,3 +27,7 @@ pnpm-debug.log*
 # sanity studio
 studio/dist/
 studio/node_modules/
+studio/.sanity/
+
+# scratch
+tmp/
