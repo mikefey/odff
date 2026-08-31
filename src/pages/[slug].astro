@@ -1,0 +1,34 @@
+---
+import { sanityClient } from 'sanity:client';
+import { defineQuery } from 'groq';
+import { PortableText } from 'astro-portabletext';
+import { getPostSlugs } from '../utils/sanity';
+
+export async function getStaticPaths() {
+  return await getPostSlugs();
+}
+
+const POST_QUERY = defineQuery(
+  `*[_type == "post" && slug.current == $slug][0]{ _id, title, body, publishedAt }`
+);
+
+const { slug } = Astro.params;
+const post = await sanityClient.fetch(POST_QUERY, { slug });
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{post?.title}</title>
+  </head>
+  <body>
+    <article>
+      <h1>{post?.title}</h1>
+      {post?.body && <PortableText value={post.body} />}
+    </article>
+    <p><a href="/">Back to all posts</a></p>
+  </body>
+</html>

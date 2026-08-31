@@ -1,0 +1,33 @@
+---
+import { getPosts } from '../utils/sanity';
+
+interface Post {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  excerpt?: string;
+  publishedAt?: string;
+}
+
+const posts: Post[] = await getPosts();
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>odff</title>
+  </head>
+  <body>
+    <h1>odff</h1>
+    <ul>
+      {posts.map((post) => (
+        <li>
+          <a href={`/${post.slug.current}`}>{post.title}</a>
+        </li>
+      ))}
+    </ul>
+  </body>
+</html>
