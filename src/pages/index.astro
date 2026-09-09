@@ -16,6 +16,7 @@ const bookRoomUrl = header.bookRoomUrl || 'https://atpscan.msp.proofpoint.com/?d
 const dateRange = hero.dateRange || 'OCTOBER 27 – 31';
 const location = hero.location || 'OJAI, CALIFORNIA';
 const title = hero.title ?? 'Ojai Documentary\nFilm Festival';
+const contactLabel = footer.contactLabel || 'CONNECT@OJAIDOCUMENTARYFILMFESTIVAL.COM';
 const contactEmail = footer.contactEmail || 'CONNECT@OJAIDOCUMENTARYFILMFESTIVAL.COM';
 ---
 
@@ -76,9 +77,9 @@ const contactEmail = footer.contactEmail || 'CONNECT@OJAIDOCUMENTARYFILMFESTIVAL
 
     <footer class="site-footer">
       {contactEmail ? (
-        <a href={`mailto:${contactEmail}`} class="footer-email">{contactEmail}</a>
+        <a href={`mailto:${contactEmail}`} class="footer-email">{contactLabel}</a>
       ) : (
-        <span class="footer-email">{contactEmail}</span>
+        <span class="footer-email">{contactLabel}</span>
       )}
     </footer>
 

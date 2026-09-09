@@ -35,6 +35,7 @@ const SITE_SETTINGS_QUERY = defineQuery(
       quote
     },
     footer {
+      contactLabel,
       contactEmail
     }
   }`

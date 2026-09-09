@@ -132,10 +132,18 @@ export const siteSettings = defineType({
       type: 'object',
       fields: [
         defineField({
+          name: 'contactLabel',
+          title: 'Contact Label',
+          type: 'string',
+          initialValue: 'CONNECT@OJAIDOCUMENTARYFILMFESTIVAL.COM',
+          description: 'The text shown to visitors in the footer.',
+        }),
+        defineField({
           name: 'contactEmail',
           title: 'Contact Email',
           type: 'string',
           initialValue: 'CONNECT@OJAIDOCUMENTARYFILMFESTIVAL.COM',
+          description: 'The email address used in the mailto link.',
           validation: (rule) => rule.email().optional(),
         }),
       ],
