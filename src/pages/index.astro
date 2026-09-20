@@ -6,18 +6,85 @@ const settings = await getSiteSettings();
 
 const header = settings?.header ?? {};
 const hero = settings?.hero ?? {};
+const ticketsBanner = settings?.ticketsBanner ?? {};
 const footer = settings?.footer ?? {};
 
 const buyTicketsLabel = header.buyTicketsLabel || 'BUY TICKETS';
 const buyTicketsUrl = header.buyTicketsUrl || 'https://www.ojaiplayhouse.com/';
 const bookRoomLabel = header.bookRoomLabel || 'BOOK A ROOM';
 const bookRoomUrl = header.bookRoomUrl || 'https://atpscan.msp.proofpoint.com/?d=07Me8axVNsYk14ERKBvxeXiB1MsKOQv_ekiQVzyiG9c&f=kmGL3MVNdE_ZQJCeFO4bk3OwxLd3v1iH0IOFs71AdBsrvGdTAdZzdxIH8QHZHdA1&i=&k=BS91&m=B9f9yOjQQUHyzE-eH4lupq3S3yDBPIeqe4LhgLxjfdjZ5QF54yNFK2ZhjLRZ-jysTQh_6PHZn2qhdCKZHbmMXG5Zeqy3WyPEpbX6rVLBSwDTGN8G4hERP0GDdb7lwKol&n=Iu9xyHUa3erwK-N2Cwt_REhi0QLCQAvmvw9hdJkL8M_7eZn4l8a8F9S2H7boX3CQ&r=m3m76g3BcQaTRTnOYIIQpLo9Fyt5_YL480r-VfI214U-vrj8vwXjYXyOcgdjCC4B&s=42962907a272afd69fd225ef29f46e7099cb332dd69bd1b4a854a3131fbead4f&u=https%3A%2F%2Fbe.synxis.com%2F%3F%26amp%3Bchain%3D24447%26amp%3Bhotel%3D98714%26amp%3BSRC%3D30%26amp%3Bpromo%3DODFF%26amp%3Barrive%3D2026-10-27%26amp%3Bnights%3D1';
+const headerBadgeUrl = header.headerBadge?.asset?.url || '/star-icon.png';
+const headerBadgeAlt = header.headerBadge?.alt || '';
 
-const dateRange = hero.dateRange || 'OCTOBER 27 – 31';
+const dateRange = hero.dateRange || 'OCTOBER 27–30';
 const location = hero.location || 'OJAI, CALIFORNIA';
+const monogramUrl = hero.monogram?.asset?.url || '/odff-monogram.png';
+const monogramAlt = hero.monogram?.alt || '';
 const title = hero.title ?? 'Ojai Documentary\nFilm Festival';
+const presentedBy = hero.presentedBy || 'Presented by Hotel El Roblar & Ojai Playhouse';
+const heroImageUrl = hero.heroImage?.asset?.url;
+const heroImageAlt = hero.heroImage?.alt || '';
+const heroHeading = hero.heroHeading;
+const botanicalIllustrationUrl = hero.botanicalIllustration?.asset?.url;
+const botanicalIllustrationAlt = hero.botanicalIllustration?.alt || '';
+
+const ticketsBannerLabel = ticketsBanner.label || 'Times + Tickets at';
+const ticketsBannerLinkLabel = ticketsBanner.linkLabel || 'ojaiplayhouse.com';
+const ticketsBannerUrl = ticketsBanner.url || 'https://www.ojaiplayhouse.com/';
+
+const badgeLabel = footer.badgeLabel || 'Best Fest of the West';
+const badgeIllustrationUrl = footer.badgeIllustration?.asset?.url || '/odff-best-fest.png';
+const badgeIllustrationAlt = footer.badgeIllustration?.alt || badgeLabel;
 const contactLabel = footer.contactLabel || 'CONNECT@OJAIDOCUMENTARYFILMFESTIVAL.COM';
 const contactEmail = footer.contactEmail || 'CONNECT@OJAIDOCUMENTARYFILMFESTIVAL.COM';
+
+const fallbackSchedule = [
+  {
+    dayLabel: 'Monday, October 26',
+    screenings: [
+      { time: '1 – 4 PM', title: 'The Story of Documentary Film' },
+      { time: '5 – 9 PM', title: 'Musk' },
+    ],
+  },
+  {
+    dayLabel: 'Tuesday, October 27',
+    screenings: [
+      { time: '12 PM', title: 'Punishment Park', note: 'Q&A with director Joan Churchill' },
+      { time: '2:30 PM', title: 'Rehearsals for a Revolution' },
+      { time: '4:30 PM', title: 'Everest: The Other Side' },
+      { time: '7 PM', title: 'Nuisance Bear', note: 'Q&A with directors Jack Weisman & Joan Churchill' },
+    ],
+  },
+  {
+    dayLabel: 'Wednesday, October 28',
+    screenings: [
+      { time: '2:30 PM', title: 'Remake' },
+      { time: '4:30 PM', title: 'Bend in the River', note: 'Q&A with directors Robb Moss & Lauren Greenfield' },
+      { time: '7:30 PM', title: 'Basquiat' },
+      { time: '9:15 PM', title: 'Wild Combination: A Portrait of Arthur Russell', note: 'Intro by director Matt Wolf' },
+    ],
+  },
+  {
+    dayLabel: 'Thursday, October 29',
+    screenings: [
+      { time: '12:00 PM', title: 'Queen of Versailles', note: 'Q&A with director Lauren Greenfield' },
+      { time: '2:00 PM', title: 'Barbara Forever' },
+      { time: '4:15 PM', title: 'History of Concrete' },
+      { time: '7:00 PM', title: 'You Can See Everything' },
+    ],
+  },
+  {
+    dayLabel: 'Friday, October 30',
+    screenings: [
+      { time: '12:00 PM', title: 'Some Kind of Heaven' },
+      { time: '2:15 PM', title: 'Soul Patrol' },
+      { time: '5:00 PM', title: 'Once Upon a Time in Harlem' },
+      { time: '7:30 PM', title: 'The Best Summer', note: 'Q&A with director Tamra Davis' },
+    ],
+  },
+];
+
+const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedule;
 ---
 
 <!doctype html>
@@ -41,41 +108,104 @@ const contactEmail = footer.contactEmail || 'CONNECT@OJAIDOCUMENTARYFILMFESTIVAL
     <meta name="twitter:image" content="/odff-main-logo.png" />
   </head>
   <body>
-    <header class="site-header">
-      <nav class="header-nav">
+    <header class="topbar">
+      <nav class="topbar-nav">
         {buyTicketsUrl ? (
-          <a href={buyTicketsUrl} class="header-link" target="_blank" rel="noopener">
+          <a href={buyTicketsUrl} class="topbar-link" target="_blank" rel="noopener">
             {buyTicketsLabel}
           </a>
         ) : (
-          <span class="header-link">{buyTicketsLabel}</span>
+          <span class="topbar-link">{buyTicketsLabel}</span>
         )}
 
-        <img src="/star-icon.png" alt="" class="header-star" aria-hidden="true" />
+        <img src={headerBadgeUrl} alt={headerBadgeAlt} class="topbar-star" aria-hidden={!headerBadgeAlt} />
 
         {bookRoomUrl ? (
-          <a href={bookRoomUrl} class="header-link" target="_blank" rel="noopener">
+          <a href={bookRoomUrl} class="topbar-link" target="_blank" rel="noopener">
             {bookRoomLabel}
           </a>
         ) : (
-          <span class="header-link">{bookRoomLabel}</span>
+          <span class="topbar-link">{bookRoomLabel}</span>
         )}
       </nav>
     </header>
 
-    <main class="hero">
-      <img src="/odff-main-logo.png" alt="Ojai Documentary Film Festival — October 27-31, Ojai, California" class="hero-logo" />
+    <main>
+      <section class="festival-header">
+        <div class="festival-meta">
+          <span class="festival-meta-item">{dateRange}</span>
+          <img src={monogramUrl} alt={monogramAlt} class="festival-monogram" aria-hidden={!monogramAlt} />
+          <span class="festival-meta-item">{location}</span>
+        </div>
+
+        <h1 class="festival-title">
+          {String(title).split('\n').map((line) => <span class="festival-title-line">{line}</span>)}
+        </h1>
+
+        {presentedBy && <p class="festival-presented-by">{presentedBy}</p>}
+      </section>
+
+      <section class="hero-photo-wrap">
+        <div class="hero-photo">
+          {heroImageUrl ? (
+            <img src={heroImageUrl} alt={heroImageAlt} class="hero-photo-img" />
+          ) : (
+            <div class="hero-photo-placeholder" aria-hidden="true"></div>
+          )}
+
+          {heroHeading && (
+            <div class="hero-photo-heading">
+              {heroHeading.split('\n').map((line: string) => <span>{line}</span>)}
+            </div>
+          )}
+        </div>
+      </section>
 
       {hero.body && (
-        <div class="hero-body">
+        <section class="description">
           <PortableText value={hero.body} />
-        </div>
+        </section>
       )}
 
-      <img src="/odff-best-fest.png" alt="Best Fest in the West" class="hero-emblem" />
+      {botanicalIllustrationUrl && (
+        <img src={botanicalIllustrationUrl} alt={botanicalIllustrationAlt} class="divider" aria-hidden={!botanicalIllustrationAlt} />
+      )}
+
+      <section class="tickets-banner">
+        {ticketsBannerUrl ? (
+          <a href={ticketsBannerUrl} target="_blank" rel="noopener" class="tickets-banner-link">
+            <span>{ticketsBannerLabel}</span>
+            <span>{ticketsBannerLinkLabel}</span>
+          </a>
+        ) : (
+          <div class="tickets-banner-link">
+            <span>{ticketsBannerLabel}</span>
+            <span>{ticketsBannerLinkLabel}</span>
+          </div>
+        )}
+      </section>
+
+      <section class="schedule">
+        {schedule.map((day: any) => (
+          <div class="schedule-day">
+            <h2 class="schedule-day-label">{day.dayLabel}</h2>
+            <div class="schedule-day-rule"></div>
+
+            {day.screenings?.map((screening: any) => (
+              <div class="screening">
+                <p class="screening-time">{screening.time}</p>
+                <p class="screening-title">{screening.title}</p>
+                {screening.note && <p class="screening-note">{screening.note}</p>}
+              </div>
+            ))}
+          </div>
+        ))}
+      </section>
     </main>
 
     <footer class="site-footer">
+      <img src={badgeIllustrationUrl} alt={badgeIllustrationAlt} class="footer-badge" />
+
       {contactEmail ? (
         <a href={`mailto:${contactEmail}`} class="footer-email">{contactLabel}</a>
       ) : (
@@ -93,10 +223,11 @@ const contactEmail = footer.contactEmail || 'CONNECT@OJAIDOCUMENTARYFILMFESTIVAL
       }
 
       :root {
-        --color-bg: #F8ECCE;
-        --color-header: #A6B6A0;
-        --color-header-text: #F8ECCE;
+        --color-bg: #f8ecce;
+        --color-accent-red: #c1523e;
+        --color-accent-salmon: #dd9483;
         --color-text: #000000;
+        --color-cream: #f8ecce;
         --font-display: 'TAYCardano', 'Times New Roman', serif;
         --font-body: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       }
@@ -119,13 +250,14 @@ const contactEmail = footer.contactEmail || 'CONNECT@OJAIDOCUMENTARYFILMFESTIVAL
         overflow-x: hidden;
       }
 
-      .site-header {
-        background-color: var(--color-header);
+      /* Top bar */
+      .topbar {
+        background-color: var(--color-accent-red);
         width: 100%;
         min-height: 50px;
       }
 
-      .header-nav {
+      .topbar-nav {
         display: grid;
         grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
         align-items: center;
@@ -137,92 +269,273 @@ const contactEmail = footer.contactEmail || 'CONNECT@OJAIDOCUMENTARYFILMFESTIVAL
         margin: 0 auto;
       }
 
-      .header-nav > :first-child {
+      .topbar-nav > :first-child {
         justify-self: end;
       }
 
-      .header-nav > :last-child {
+      .topbar-nav > :last-child {
         justify-self: start;
       }
 
-      .header-link {
-        font-family: var(--font-display);
-        font-weight: 400;
-        font-size: 1.375rem;
-        letter-spacing: 0.1em;
+      .topbar-link {
+        font-family: var(--font-body);
+        font-weight: 700;
+        font-size: 0.875rem;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
-        color: var(--color-text);
+        color: var(--color-cream);
         text-decoration: none;
         white-space: nowrap;
         padding: 0.25rem 0.75rem;
-        transition: color 0.2s ease-out;
+        transition: opacity 0.2s ease-out;
       }
 
-      a.header-link:hover {
-        color: var(--color-header-text);
+      a.topbar-link:hover {
+        opacity: 0.75;
       }
 
-      .header-star {
+      .topbar-star {
         display: block;
-        width: 25px;
-        height: 25px;
+        width: 18px;
+        height: 18px;
         flex-shrink: 0;
         object-fit: contain;
       }
 
-      .hero {
-        max-width: 1100px;
+      /* Festival header */
+      .festival-header {
+        max-width: 900px;
         margin: 0 auto;
-        padding: 4rem 2rem 3.5rem;
+        padding: 2.5rem 2rem 0;
         text-align: center;
       }
 
-      .hero-logo {
-        width: 100%;
-        max-width: 674px;
-        height: auto;
+      .festival-meta {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .festival-meta-item {
+        font-family: var(--font-body);
+        font-weight: 500;
+        font-size: 0.8125rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+      }
+
+      .festival-monogram {
+        width: 48px;
+        height: 48px;
         object-fit: contain;
-        margin: 0 auto 4rem;
+        flex-shrink: 0;
+      }
+
+      .festival-title {
+        font-family: var(--font-display);
+        font-weight: 400;
+        font-size: 3.5rem;
+        line-height: 1.1;
+      }
+
+      .festival-title-line {
         display: block;
       }
 
-      .hero-body {
-        max-width: 663px;
-        margin: 0 auto;
-        text-align: left;
+      .festival-presented-by {
+        margin-top: 1.25rem;
         font-family: var(--font-body);
         font-weight: 500;
-        font-size: 1.25rem;
-        line-height: 1.6;
-        color: var(--color-text);
+        font-size: 0.8125rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
       }
 
-      .hero-body p {
+      /* Hero photo */
+      .hero-photo-wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 2.5rem 2rem 0;
+      }
+
+      .hero-photo {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 4 / 5;
+        overflow: hidden;
+      }
+
+      .hero-photo-img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .hero-photo-placeholder {
+        width: 100%;
+        height: 100%;
+        background-color: var(--color-accent-salmon);
+        opacity: 0.35;
+      }
+
+      .hero-photo-heading {
+        position: absolute;
+        top: 30%;
+        right: 8%;
+        font-family: var(--font-body);
+        font-weight: 400;
+        font-size: 2.5rem;
+        line-height: 1.15;
+        color: var(--color-text);
+        text-align: left;
+      }
+
+      .hero-photo-heading span {
+        display: block;
+      }
+
+      /* Description */
+      .description {
+        max-width: 663px;
+        margin: 3rem auto 0;
+        padding: 0 2rem;
+        text-align: center;
+        font-family: var(--font-body);
+        font-weight: 500;
+        font-size: 1.0625rem;
+        line-height: 1.6;
+      }
+
+      .description p {
         margin-bottom: 1.2em;
       }
 
-      .hero-body p:last-child {
+      .description p:last-child {
         margin-bottom: 0;
       }
 
-      .hero-emblem {
+      .divider {
         display: block;
         width: 100%;
-        max-width: 494px;
+        max-width: 140px;
         height: auto;
         object-fit: contain;
-        margin: 2.75rem auto 0;
+        margin: 2.5rem auto 0;
       }
 
-      .site-footer {
-        padding: 4rem 1.5rem 4rem;
+      /* Tickets banner */
+      .tickets-banner {
+        background-color: var(--color-accent-red);
+        width: 100%;
+        margin-top: 3rem;
+        padding: 1.75rem 1.5rem;
+      }
+
+      .tickets-banner-link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+        text-decoration: none;
+        color: var(--color-cream);
+        font-family: var(--font-body);
+        font-weight: 700;
+        font-size: 1.0625rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
         text-align: center;
       }
 
-      .footer-email {
+      /* Schedule */
+      .schedule {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 3rem 2rem 3.5rem;
+        text-align: center;
+      }
+
+      .schedule-day {
+        margin-bottom: 3rem;
+      }
+
+      .schedule-day:last-child {
+        margin-bottom: 0;
+      }
+
+      .schedule-day-label {
+        font-family: var(--font-body);
+        font-weight: 700;
+        font-size: 1rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--color-accent-red);
+        margin-bottom: 0.75rem;
+      }
+
+      .schedule-day-rule {
+        width: 100%;
+        height: 1px;
+        background-color: var(--color-accent-red);
+        margin-bottom: 1.75rem;
+      }
+
+      .screening {
+        margin-bottom: 1.5rem;
+      }
+
+      .screening:last-child {
+        margin-bottom: 0;
+      }
+
+      .screening-time {
+        font-family: var(--font-body);
+        font-weight: 700;
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--color-accent-red);
+        margin-bottom: 0.35rem;
+      }
+
+      .screening-title {
         font-family: var(--font-display);
         font-weight: 400;
         font-size: 1.375rem;
+      }
+
+      .screening-note {
+        margin-top: 0.35rem;
+        font-family: var(--font-body);
+        font-weight: 500;
+        font-size: 0.6875rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--color-accent-red);
+      }
+
+      /* Footer */
+      .site-footer {
+        background-color: var(--color-accent-salmon);
+        padding: 3rem 1.5rem 2.5rem;
+        text-align: center;
+      }
+
+      .footer-badge {
+        display: block;
+        width: 100%;
+        max-width: 320px;
+        height: auto;
+        object-fit: contain;
+        margin: 0 auto 1.5rem;
+      }
+
+      .footer-email {
+        font-family: var(--font-body);
+        font-weight: 700;
+        font-size: 0.8125rem;
         letter-spacing: 0.1em;
         text-transform: uppercase;
         color: var(--color-text);
@@ -232,64 +545,91 @@ const contactEmail = footer.contactEmail || 'CONNECT@OJAIDOCUMENTARYFILMFESTIVAL
         text-decoration-thickness: auto;
         text-underline-offset: auto;
         text-underline-position: from-font;
-        transition: color 0.2s ease-out;
+        transition: opacity 0.2s ease-out;
       }
 
       a.footer-email:hover {
-        color: var(--color-header);
+        opacity: 0.7;
       }
 
       @media (max-width: 640px) {
-        .hero {
-          padding: 1.7rem 1.5rem 2.5rem;
+        .festival-header {
+          padding: 1.75rem 1.5rem 0;
         }
-        .hero-logo {
-          margin-bottom: 1.5rem;
+        .festival-meta {
+          gap: 0.75rem;
+          margin-bottom: 1rem;
         }
-        .header-nav {
+        .festival-meta-item {
+          font-size: 0.625rem;
+          letter-spacing: 0.08em;
+        }
+        .festival-monogram {
+          width: 32px;
+          height: 32px;
+        }
+        .festival-title {
+          font-size: 2.25rem;
+        }
+        .hero-photo-wrap {
+          padding: 1.75rem 1.25rem 0;
+        }
+        .hero-photo-heading {
+          font-size: 1.5rem;
+        }
+        .description {
+          font-size: 0.9375rem;
+          margin-top: 2rem;
+        }
+        .topbar-nav {
           gap: 0.5rem;
           padding: 0.5rem 0.75rem;
         }
-        .header-link {
-          font-size: 1.125rem;
+        .topbar-link {
+          font-size: 0.6875rem;
           padding: 0.25rem 0.5rem;
           white-space: normal;
           overflow-wrap: break-word;
           text-align: center;
         }
-        .header-star {
-          width: 20px;
-          height: 20px;
+        .topbar-star {
+          width: 15px;
+          height: 15px;
         }
-        .hero-body {
-          font-size: 1rem;
+        .schedule {
+          padding: 2.5rem 1.5rem 2.5rem;
         }
-        .hero-emblem {
-          margin-top: 2.5rem;
-          max-width: 264px;
+        .schedule-day {
+          margin-bottom: 2.25rem;
+        }
+        .screening-title {
+          font-size: 1.125rem;
+        }
+        .footer-badge {
+          max-width: 220px;
         }
         .footer-email {
-          font-size: 0.75rem;
+          font-size: 0.6875rem;
           letter-spacing: 0.05em;
-        }
-        .site-footer {
-          padding-top: 1.5rem;
         }
       }
 
       @media (max-width: 400px) {
-        .header-nav {
+        .topbar-nav {
           gap: 0.375rem;
           padding: 0.5rem 0.5rem;
         }
-        .header-link {
-          font-size: 0.8125rem;
+        .topbar-link {
+          font-size: 0.5625rem;
           letter-spacing: 0.05em;
           padding: 0.25rem 0.25rem;
         }
-        .header-star {
-          width: 16px;
-          height: 16px;
+        .topbar-star {
+          width: 13px;
+          height: 13px;
+        }
+        .festival-title {
+          font-size: 1.875rem;
         }
       }
     </style>

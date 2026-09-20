@@ -30,11 +30,28 @@ const SITE_SETTINGS_QUERY = defineQuery(
       location,
       monogram { asset->{ _id, url }, alt, hotspot, crop },
       title,
+      presentedBy,
+      heroImage { asset->{ _id, url }, alt, hotspot, crop },
+      heroHeading,
       body,
-      botanicalIllustration { asset->{ _id, url }, alt, hotspot, crop },
-      quote
+      botanicalIllustration { asset->{ _id, url }, alt, hotspot, crop }
+    },
+    ticketsBanner {
+      label,
+      linkLabel,
+      url
+    },
+    schedule[] {
+      dayLabel,
+      screenings[] {
+        time,
+        title,
+        note
+      }
     },
     footer {
+      badgeLabel,
+      badgeIllustration { asset->{ _id, url }, alt, hotspot, crop },
       contactLabel,
       contactEmail
     }

@@ -65,7 +65,7 @@ export const siteSettings = defineType({
           name: 'dateRange',
           title: 'Date Range',
           type: 'string',
-          initialValue: 'OCTOBER 27 – 31',
+          initialValue: 'OCTOBER 27–30',
           validation: (rule) => rule.required(),
         }),
         defineField({
@@ -98,6 +98,33 @@ export const siteSettings = defineType({
           validation: (rule) => rule.required(),
         }),
         defineField({
+          name: 'presentedBy',
+          title: 'Presented By',
+          type: 'string',
+          initialValue: 'Presented by Hotel El Roblar & Ojai Playhouse',
+        }),
+        defineField({
+          name: 'heroImage',
+          title: 'Hero Image',
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            defineField({
+              name: 'alt',
+              title: 'Alternative Text',
+              type: 'string',
+              validation: (rule) =>
+                rule.required().warning('Alt text is important for accessibility'),
+            }),
+          ],
+        }),
+        defineField({
+          name: 'heroHeading',
+          title: 'Hero Image Heading',
+          type: 'string',
+          description: 'Optional short text overlaid on the hero image. Use a line break for multiple lines.',
+        }),
+        defineField({
           name: 'body',
           title: 'Body',
           type: 'array',
@@ -118,19 +145,69 @@ export const siteSettings = defineType({
             }),
           ],
         }),
+      ],
+    }),
+    defineField({
+      name: 'ticketsBanner',
+      title: 'Tickets Banner',
+      type: 'object',
+      description: 'The bold banner promoting tickets, shown above the schedule.',
+      fields: [
         defineField({
-          name: 'quote',
-          title: 'Pull Quote',
+          name: 'label',
+          title: 'Label',
           type: 'string',
-          initialValue: 'Best Fest in the West',
+          initialValue: 'Times + Tickets at',
+        }),
+        defineField({
+          name: 'linkLabel',
+          title: 'Link Label',
+          type: 'string',
+          initialValue: 'ojaiplayhouse.com',
+        }),
+        defineField({
+          name: 'url',
+          title: 'URL',
+          type: 'url',
+          initialValue: 'https://www.ojaiplayhouse.com/',
+          validation: (rule) =>
+            rule.uri({ scheme: ['http', 'https'] }).optional(),
         }),
       ],
+    }),
+    defineField({
+      name: 'schedule',
+      title: 'Schedule',
+      type: 'array',
+      of: [{ type: 'scheduleDay' }],
     }),
     defineField({
       name: 'footer',
       title: 'Footer',
       type: 'object',
       fields: [
+        defineField({
+          name: 'badgeLabel',
+          title: 'Badge Label',
+          type: 'string',
+          initialValue: 'Best Fest of the West',
+          description: 'Shown inside the footer emblem.',
+        }),
+        defineField({
+          name: 'badgeIllustration',
+          title: 'Badge Illustration',
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            defineField({
+              name: 'alt',
+              title: 'Alternative Text',
+              type: 'string',
+              validation: (rule) =>
+                rule.required().warning('Alt text is important for accessibility'),
+            }),
+          ],
+        }),
         defineField({
           name: 'contactLabel',
           title: 'Contact Label',
