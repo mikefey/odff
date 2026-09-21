@@ -319,9 +319,10 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
       .hero-carousel {
         position: relative;
         width: 100%;
+        max-width: 1000px;
         aspect-ratio: 1600 / 1100;
         overflow: hidden;
-        margin-top: 2rem;
+        margin: 2rem auto 0;
         background-color: var(--color-accent-red);
         background-color: color-mix(in srgb, var(--color-accent-red) 20%, var(--color-bg));
       }
