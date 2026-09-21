@@ -24,6 +24,14 @@ export const screening = defineType({
       type: 'string',
       description: 'Optional line shown under the title, e.g. "Q&A with director Joan Churchill"',
     }),
+    defineField({
+      name: 'url',
+      title: 'Event Page URL',
+      type: 'url',
+      description: 'Link to the film\'s event page on ojaiplayhouse.com. The title links here when set.',
+      validation: (rule) =>
+        rule.uri({ scheme: ['http', 'https'] }).optional(),
+    }),
   ],
   preview: {
     select: { title: 'title', subtitle: 'time' },

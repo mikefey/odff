@@ -41,7 +41,7 @@ export const siteSettings = defineType({
         }),
         defineField({
           name: 'headerBadge',
-          title: 'Header Badge Image',
+          title: 'Header Star Icon',
           type: 'image',
           options: { hotspot: true },
           fields: [
@@ -62,116 +62,49 @@ export const siteSettings = defineType({
       type: 'object',
       fields: [
         defineField({
-          name: 'dateRange',
-          title: 'Date Range',
-          type: 'string',
-          initialValue: 'OCTOBER 27–30',
-          validation: (rule) => rule.required(),
-        }),
-        defineField({
-          name: 'location',
-          title: 'Location',
-          type: 'string',
-          initialValue: 'OJAI, CALIFORNIA',
-          validation: (rule) => rule.required(),
-        }),
-        defineField({
-          name: 'monogram',
-          title: 'Monogram Emblem Image',
+          name: 'logo',
+          title: 'Festival Logo',
           type: 'image',
+          description:
+            'The full lockup graphic (dates, monogram, location, title, presented-by line). Replace this image whenever the dates or presenting partners change.',
           options: { hotspot: true },
           fields: [
             defineField({
               name: 'alt',
               title: 'Alternative Text',
               type: 'string',
+              initialValue: 'Ojai Documentary Film Festival',
               validation: (rule) =>
                 rule.required().warning('Alt text is important for accessibility'),
             }),
           ],
         }),
         defineField({
-          name: 'title',
-          title: 'Title',
-          type: 'string',
-          initialValue: 'Ojai Documentary Film Festival',
-          validation: (rule) => rule.required(),
-        }),
-        defineField({
-          name: 'presentedBy',
-          title: 'Presented By',
-          type: 'string',
-          initialValue: 'Presented by Hotel El Roblar & Ojai Playhouse',
-        }),
-        defineField({
-          name: 'heroImage',
-          title: 'Hero Image',
-          type: 'image',
-          options: { hotspot: true },
-          fields: [
-            defineField({
-              name: 'alt',
-              title: 'Alternative Text',
-              type: 'string',
-              validation: (rule) =>
-                rule.required().warning('Alt text is important for accessibility'),
-            }),
+          name: 'images',
+          title: 'Hero Photo Carousel',
+          type: 'array',
+          description: 'Photos shown in the rotating hero carousel, in display order.',
+          of: [
+            {
+              type: 'image',
+              options: { hotspot: true },
+              fields: [
+                defineField({
+                  name: 'alt',
+                  title: 'Alternative Text',
+                  type: 'string',
+                  validation: (rule) =>
+                    rule.required().warning('Alt text is important for accessibility'),
+                }),
+              ],
+            },
           ],
-        }),
-        defineField({
-          name: 'heroHeading',
-          title: 'Hero Image Heading',
-          type: 'string',
-          description: 'Optional short text overlaid on the hero image. Use a line break for multiple lines.',
         }),
         defineField({
           name: 'body',
           title: 'Body',
           type: 'array',
           of: [{ type: 'block' }],
-        }),
-        defineField({
-          name: 'botanicalIllustration',
-          title: 'Botanical Illustration',
-          type: 'image',
-          options: { hotspot: true },
-          fields: [
-            defineField({
-              name: 'alt',
-              title: 'Alternative Text',
-              type: 'string',
-              validation: (rule) =>
-                rule.required().warning('Alt text is important for accessibility'),
-            }),
-          ],
-        }),
-      ],
-    }),
-    defineField({
-      name: 'ticketsBanner',
-      title: 'Tickets Banner',
-      type: 'object',
-      description: 'The bold banner promoting tickets, shown above the schedule.',
-      fields: [
-        defineField({
-          name: 'label',
-          title: 'Label',
-          type: 'string',
-          initialValue: 'Times + Tickets at',
-        }),
-        defineField({
-          name: 'linkLabel',
-          title: 'Link Label',
-          type: 'string',
-          initialValue: 'ojaiplayhouse.com',
-        }),
-        defineField({
-          name: 'url',
-          title: 'URL',
-          type: 'url',
-          initialValue: 'https://www.ojaiplayhouse.com/',
-          validation: (rule) =>
-            rule.uri({ scheme: ['http', 'https'] }).optional(),
         }),
       ],
     }),
@@ -212,7 +145,7 @@ export const siteSettings = defineType({
           name: 'contactLabel',
           title: 'Contact Label',
           type: 'string',
-          initialValue: 'CONNECT@OJAIDOCUMENTARYFILMFESTIVAL.COM',
+          initialValue: 'Inquiries',
           description: 'The text shown to visitors in the footer.',
         }),
         defineField({
@@ -227,6 +160,9 @@ export const siteSettings = defineType({
     }),
   ],
   preview: {
-    select: { title: 'hero.title' },
+    select: { media: 'hero.logo' },
+    prepare({ media }) {
+      return { title: 'Site Settings', media };
+    },
   },
 });

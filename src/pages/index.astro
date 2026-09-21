@@ -6,7 +6,6 @@ const settings = await getSiteSettings();
 
 const header = settings?.header ?? {};
 const hero = settings?.hero ?? {};
-const ticketsBanner = settings?.ticketsBanner ?? {};
 const footer = settings?.footer ?? {};
 
 const buyTicketsLabel = header.buyTicketsLabel || 'BUY TICKETS';
@@ -16,34 +15,30 @@ const bookRoomUrl = header.bookRoomUrl || 'https://atpscan.msp.proofpoint.com/?d
 const headerBadgeUrl = header.headerBadge?.asset?.url || '/star-icon.png';
 const headerBadgeAlt = header.headerBadge?.alt || '';
 
-const dateRange = hero.dateRange || 'OCTOBER 27–30';
-const location = hero.location || 'OJAI, CALIFORNIA';
-const monogramUrl = hero.monogram?.asset?.url || '/odff-monogram.png';
-const monogramAlt = hero.monogram?.alt || '';
-const title = hero.title ?? 'Ojai Documentary\nFilm Festival';
-const presentedBy = hero.presentedBy || 'Presented by Hotel El Roblar & Ojai Playhouse';
-const heroImageUrl = hero.heroImage?.asset?.url;
-const heroImageAlt = hero.heroImage?.alt || '';
-const heroHeading = hero.heroHeading;
-const botanicalIllustrationUrl = hero.botanicalIllustration?.asset?.url;
-const botanicalIllustrationAlt = hero.botanicalIllustration?.alt || '';
+const logoUrl = hero.logo?.asset?.url || '/odff-main-logo.png';
+const logoAlt = hero.logo?.alt || 'Ojai Documentary Film Festival — October 26–30, Ojai, California. Presented by Hotel El Roblar & Ojai Playhouse.';
 
-const ticketsBannerLabel = ticketsBanner.label || 'Times + Tickets at';
-const ticketsBannerLinkLabel = ticketsBanner.linkLabel || 'ojaiplayhouse.com';
-const ticketsBannerUrl = ticketsBanner.url || 'https://www.ojaiplayhouse.com/';
+const fallbackHeroImages = ['01', '02', '03', '04', '05', '07', '08'].map((n) => ({
+  asset: { url: `/hero/hero-${n}.png` },
+  alt: '',
+}));
+const heroImages = hero.images?.length ? hero.images : fallbackHeroImages;
 
 const badgeLabel = footer.badgeLabel || 'Best Fest of the West';
 const badgeIllustrationUrl = footer.badgeIllustration?.asset?.url || '/odff-best-fest.png';
 const badgeIllustrationAlt = footer.badgeIllustration?.alt || badgeLabel;
-const contactLabel = footer.contactLabel || 'CONNECT@OJAIDOCUMENTARYFILMFESTIVAL.COM';
+const contactLabel = footer.contactLabel || 'Inquiries';
 const contactEmail = footer.contactEmail || 'CONNECT@OJAIDOCUMENTARYFILMFESTIVAL.COM';
+
+const fallbackBodyText =
+  "The Ojai Documentary Film Festival presented by Hotel El Roblar and the Ojai Playhouse Theater will take place October 27–30, bringing together visionary documentary films and series, in-person conversations, and experiences that invite audiences and filmmakers to connect. Together, we explore nonfiction storytelling from vérité and hybrid forms to the wholly unclassifiable, spanning the contemporary and the nostalgic, transforming real life into cinema that's anything but boring.";
 
 const fallbackSchedule = [
   {
     dayLabel: 'Monday, October 26',
     screenings: [
-      { time: '1 – 4 PM', title: 'The Story of Documentary Film' },
-      { time: '5 – 9 PM', title: 'Musk' },
+      { time: '1–4 PM', title: 'The Story of Documentary Film' },
+      { time: '5–9 PM', title: 'Musk' },
     ],
   },
   {
@@ -95,15 +90,15 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
     <meta name="description" content="The Ojai Documentary Film Festival Presented by Hotel El Roblar at the Ojai Playhouse Theater will take place October 27-30, bringing together visionary documentary films and series, in-person conversations, and experiences that invite audiences and filmmakers to connect." />
     <link rel="icon" type="image/png" href="/star-icon.png" />
     <meta name="generator" content={Astro.generator} />
-    <title>{String(title).replace(/\n/g, ' ')}</title>
+    <title>Ojai Documentary Film Festival</title>
 
     <meta property="og:type" content="website" />
-    <meta property="og:title" content={String(title).replace(/\n/g, ' ')} />
+    <meta property="og:title" content="Ojai Documentary Film Festival" />
     <meta property="og:description" content="The Ojai Documentary Film Festival Presented by Hotel El Roblar at the Ojai Playhouse Theater will take place October 27-30, bringing together visionary documentary films and series, in-person conversations, and experiences that invite audiences and filmmakers to connect." />
     <meta property="og:image" content="/odff-main-logo.png" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={String(title).replace(/\n/g, ' ')} />
+    <meta name="twitter:title" content="Ojai Documentary Film Festival" />
     <meta name="twitter:description" content="The Ojai Documentary Film Festival Presented by Hotel El Roblar at the Ojai Playhouse Theater will take place October 27-30, bringing together visionary documentary films and series, in-person conversations, and experiences that invite audiences and filmmakers to connect." />
     <meta name="twitter:image" content="/odff-main-logo.png" />
   </head>
@@ -131,70 +126,57 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
     </header>
 
     <main>
-      <section class="festival-header">
-        <div class="festival-meta">
-          <span class="festival-meta-item">{dateRange}</span>
-          <img src={monogramUrl} alt={monogramAlt} class="festival-monogram" aria-hidden={!monogramAlt} />
-          <span class="festival-meta-item">{location}</span>
-        </div>
-
-        <h1 class="festival-title">
-          {String(title).split('\n').map((line) => <span class="festival-title-line">{line}</span>)}
-        </h1>
-
-        {presentedBy && <p class="festival-presented-by">{presentedBy}</p>}
+      <section class="festival-logo">
+        <img src={logoUrl} alt={logoAlt} class="festival-logo-img" />
       </section>
 
-      <section class="hero-photo-wrap">
-        <div class="hero-photo">
-          {heroImageUrl ? (
-            <img src={heroImageUrl} alt={heroImageAlt} class="hero-photo-img" />
-          ) : (
-            <div class="hero-photo-placeholder" aria-hidden="true"></div>
-          )}
+      <section class="hero-carousel" data-carousel>
+        {heroImages.map((image: any, i: number) => (
+          <img
+            src={image.asset?.url}
+            alt={image.alt || ''}
+            class="hero-carousel-slide"
+            data-active={i === 0 ? 'true' : 'false'}
+          />
+        ))}
 
-          {heroHeading && (
-            <div class="hero-photo-heading">
-              {heroHeading.split('\n').map((line: string) => <span>{line}</span>)}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {hero.body && (
-        <section class="description">
-          <PortableText value={hero.body} />
-        </section>
-      )}
-
-      {botanicalIllustrationUrl && (
-        <img src={botanicalIllustrationUrl} alt={botanicalIllustrationAlt} class="divider" aria-hidden={!botanicalIllustrationAlt} />
-      )}
-
-      <section class="tickets-banner">
-        {ticketsBannerUrl ? (
-          <a href={ticketsBannerUrl} target="_blank" rel="noopener" class="tickets-banner-link">
-            <span>{ticketsBannerLabel}</span>
-            <span>{ticketsBannerLinkLabel}</span>
-          </a>
-        ) : (
-          <div class="tickets-banner-link">
-            <span>{ticketsBannerLabel}</span>
-            <span>{ticketsBannerLinkLabel}</span>
+        {heroImages.length > 1 && (
+          <div class="hero-carousel-dots">
+            {heroImages.map((_: any, i: number) => (
+              <button
+                type="button"
+                class="hero-carousel-dot"
+                data-index={i}
+                aria-label={`Show photo ${i + 1}`}
+              />
+            ))}
           </div>
         )}
       </section>
 
+      <section class="description">
+        {hero.body ? <PortableText value={hero.body} /> : <p>{fallbackBodyText}</p>}
+      </section>
+
       <section class="schedule">
+        <h2 class="schedule-heading">Schedule</h2>
+        <div class="schedule-heading-rule"></div>
+
         {schedule.map((day: any) => (
           <div class="schedule-day">
-            <h2 class="schedule-day-label">{day.dayLabel}</h2>
+            <h3 class="schedule-day-label">{day.dayLabel}</h3>
             <div class="schedule-day-rule"></div>
 
             {day.screenings?.map((screening: any) => (
               <div class="screening">
                 <p class="screening-time">{screening.time}</p>
-                <p class="screening-title">{screening.title}</p>
+                {screening.url ? (
+                  <a href={screening.url} class="screening-title" target="_blank" rel="noopener">
+                    {screening.title}
+                  </a>
+                ) : (
+                  <p class="screening-title">{screening.title}</p>
+                )}
                 {screening.note && <p class="screening-note">{screening.note}</p>}
               </div>
             ))}
@@ -215,8 +197,16 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
 
     <style is:global>
       @font-face {
-        font-family: 'TAYCardano';
+        font-family: 'TAY Cardano';
         src: url('/fonts/TAYCardano.woff') format('woff');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'VC Garamond Condensed Trial';
+        src: url('/fonts/GaramondCondensedTrial-Regular.otf') format('opentype');
         font-weight: 400;
         font-style: normal;
         font-display: swap;
@@ -224,12 +214,12 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
 
       :root {
         --color-bg: #f8ecce;
-        --color-accent-red: #c1523e;
-        --color-accent-salmon: #dd9483;
-        --color-text: #000000;
         --color-cream: #f8ecce;
-        --font-display: 'TAYCardano', 'Times New Roman', serif;
-        --font-body: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        --color-accent-red: #c54b31;
+        --color-text: #000000;
+        --font-tay: 'TAY Cardano', 'Times New Roman', serif;
+        --font-condensed: 'VC Garamond Condensed Trial', Georgia, serif;
+        --font-serif: 'Adobe Garamond Pro', 'EB Garamond', Garamond, Georgia, serif;
       }
 
       * {
@@ -242,7 +232,7 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
       body {
         background-color: var(--color-bg);
         color: var(--color-text);
-        font-family: var(--font-body);
+        font-family: var(--font-tay);
         font-size: 16px;
         line-height: 1.5;
         -webkit-font-smoothing: antialiased;
@@ -278,123 +268,93 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
       }
 
       .topbar-link {
-        font-family: var(--font-body);
-        font-weight: 700;
-        font-size: 0.875rem;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: var(--color-cream);
+        font-family: var(--font-tay);
+        font-weight: 400;
+        font-size: 1.375rem;
+        letter-spacing: 0.1em;
+        color: var(--color-text);
         text-decoration: none;
         white-space: nowrap;
         padding: 0.25rem 0.75rem;
-        transition: opacity 0.2s ease-out;
+        transition: color 0.2s ease-out;
       }
 
       a.topbar-link:hover {
-        opacity: 0.75;
+        color: var(--color-cream);
       }
 
       .topbar-star {
         display: block;
-        width: 18px;
-        height: 18px;
+        width: 22px;
+        height: 22px;
         flex-shrink: 0;
         object-fit: contain;
       }
 
-      /* Festival header */
-      .festival-header {
+      /* Festival logo */
+      .festival-logo {
         max-width: 900px;
         margin: 0 auto;
         padding: 2.5rem 2rem 0;
         text-align: center;
       }
 
-      .festival-meta {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 1.5rem;
-        margin-bottom: 1.5rem;
-      }
-
-      .festival-meta-item {
-        font-family: var(--font-body);
-        font-weight: 500;
-        font-size: 0.8125rem;
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-      }
-
-      .festival-monogram {
-        width: 48px;
-        height: 48px;
-        object-fit: contain;
-        flex-shrink: 0;
-      }
-
-      .festival-title {
-        font-family: var(--font-display);
-        font-weight: 400;
-        font-size: 3.5rem;
-        line-height: 1.1;
-      }
-
-      .festival-title-line {
+      .festival-logo-img {
+        width: 100%;
+        max-width: 600px;
+        height: auto;
+        margin: 0 auto;
         display: block;
       }
 
-      .festival-presented-by {
-        margin-top: 1.25rem;
-        font-family: var(--font-body);
-        font-weight: 500;
-        font-size: 0.8125rem;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-      }
-
-      /* Hero photo */
-      .hero-photo-wrap {
-        max-width: 1100px;
-        margin: 0 auto;
-        padding: 2.5rem 2rem 0;
-      }
-
-      .hero-photo {
+      /* Hero carousel */
+      .hero-carousel {
         position: relative;
         width: 100%;
-        aspect-ratio: 4 / 5;
+        aspect-ratio: 1600 / 1100;
         overflow: hidden;
+        margin-top: 2rem;
+        background-color: var(--color-accent-red);
+        background-color: color-mix(in srgb, var(--color-accent-red) 20%, var(--color-bg));
       }
 
-      .hero-photo-img {
-        display: block;
+      .hero-carousel-slide {
+        position: absolute;
+        inset: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
+        opacity: 0;
+        transition: opacity 1.2s ease;
       }
 
-      .hero-photo-placeholder {
-        width: 100%;
-        height: 100%;
-        background-color: var(--color-accent-salmon);
-        opacity: 0.35;
+      .hero-carousel-slide[data-active='true'] {
+        opacity: 1;
       }
 
-      .hero-photo-heading {
+      .hero-carousel-dots {
         position: absolute;
-        top: 30%;
-        right: 8%;
-        font-family: var(--font-body);
-        font-weight: 400;
-        font-size: 2.5rem;
-        line-height: 1.15;
-        color: var(--color-text);
-        text-align: left;
+        left: 50%;
+        bottom: 1.25rem;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 0.5rem;
+        z-index: 2;
       }
 
-      .hero-photo-heading span {
-        display: block;
+      .hero-carousel-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        border: 1px solid var(--color-cream);
+        background-color: transparent;
+        padding: 0;
+        cursor: pointer;
+        transition: background-color 0.2s ease-out;
+      }
+
+      .hero-carousel-dot[data-active='true'] {
+        background-color: var(--color-cream);
       }
 
       /* Description */
@@ -403,9 +363,9 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
         margin: 3rem auto 0;
         padding: 0 2rem;
         text-align: center;
-        font-family: var(--font-body);
-        font-weight: 500;
-        font-size: 1.0625rem;
+        font-family: var(--font-serif);
+        font-weight: 400;
+        font-size: 1.5rem;
         line-height: 1.6;
       }
 
@@ -417,44 +377,27 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
         margin-bottom: 0;
       }
 
-      .divider {
-        display: block;
-        width: 100%;
-        max-width: 140px;
-        height: auto;
-        object-fit: contain;
-        margin: 2.5rem auto 0;
-      }
-
-      /* Tickets banner */
-      .tickets-banner {
-        background-color: var(--color-accent-red);
-        width: 100%;
-        margin-top: 3rem;
-        padding: 1.75rem 1.5rem;
-      }
-
-      .tickets-banner-link {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.25rem;
-        text-decoration: none;
-        color: var(--color-cream);
-        font-family: var(--font-body);
-        font-weight: 700;
-        font-size: 1.0625rem;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        text-align: center;
-      }
-
       /* Schedule */
       .schedule {
         max-width: 700px;
         margin: 0 auto;
-        padding: 3rem 2rem 3.5rem;
+        padding: 3.5rem 2rem 3.5rem;
         text-align: center;
+      }
+
+      .schedule-heading {
+        font-family: var(--font-condensed);
+        font-weight: 400;
+        font-size: 3rem;
+        line-height: 0.94;
+        margin-bottom: 1.25rem;
+      }
+
+      .schedule-heading-rule {
+        width: 100%;
+        height: 1px;
+        background-color: var(--color-accent-red);
+        margin-bottom: 2rem;
       }
 
       .schedule-day {
@@ -466,11 +409,9 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
       }
 
       .schedule-day-label {
-        font-family: var(--font-body);
-        font-weight: 700;
-        font-size: 1rem;
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
+        font-family: var(--font-tay);
+        font-weight: 400;
+        font-size: 1.25rem;
         color: var(--color-accent-red);
         margin-bottom: 0.75rem;
       }
@@ -491,35 +432,39 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
       }
 
       .screening-time {
-        font-family: var(--font-body);
-        font-weight: 700;
-        font-size: 0.75rem;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
+        font-family: var(--font-tay);
+        font-weight: 400;
+        font-size: 1.25rem;
         color: var(--color-accent-red);
         margin-bottom: 0.35rem;
       }
 
-      .screening-title {
-        font-family: var(--font-display);
+      p.screening-title,
+      a.screening-title {
+        display: inline-block;
+        font-family: var(--font-condensed);
         font-weight: 400;
-        font-size: 1.375rem;
+        font-size: 3rem;
+        line-height: 0.94;
+        color: var(--color-text);
+        text-decoration: none;
+      }
+
+      a.screening-title:hover {
+        text-decoration: underline;
       }
 
       .screening-note {
         margin-top: 0.35rem;
-        font-family: var(--font-body);
-        font-weight: 500;
-        font-size: 0.6875rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
+        font-family: var(--font-tay);
+        font-weight: 400;
+        font-size: 1.25rem;
         color: var(--color-accent-red);
       }
 
       /* Footer */
       .site-footer {
-        background-color: var(--color-accent-salmon);
-        padding: 3rem 1.5rem 2.5rem;
+        padding: 3rem 1.5rem 3.5rem;
         text-align: center;
       }
 
@@ -533,11 +478,10 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
       }
 
       .footer-email {
-        font-family: var(--font-body);
-        font-weight: 700;
-        font-size: 0.8125rem;
+        font-family: var(--font-tay);
+        font-weight: 400;
+        font-size: 1.375rem;
         letter-spacing: 0.1em;
-        text-transform: uppercase;
         color: var(--color-text);
         text-decoration-line: underline;
         text-decoration-style: solid;
@@ -545,40 +489,25 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
         text-decoration-thickness: auto;
         text-underline-offset: auto;
         text-underline-position: from-font;
-        transition: opacity 0.2s ease-out;
+        transition: color 0.2s ease-out;
       }
 
       a.footer-email:hover {
-        opacity: 0.7;
+        color: var(--color-accent-red);
       }
 
       @media (max-width: 640px) {
-        .festival-header {
+        .festival-logo {
           padding: 1.75rem 1.5rem 0;
         }
-        .festival-meta {
-          gap: 0.75rem;
-          margin-bottom: 1rem;
+        .festival-logo-img {
+          max-width: 320px;
         }
-        .festival-meta-item {
-          font-size: 0.625rem;
-          letter-spacing: 0.08em;
-        }
-        .festival-monogram {
-          width: 32px;
-          height: 32px;
-        }
-        .festival-title {
-          font-size: 2.25rem;
-        }
-        .hero-photo-wrap {
-          padding: 1.75rem 1.25rem 0;
-        }
-        .hero-photo-heading {
-          font-size: 1.5rem;
+        .hero-carousel {
+          margin-top: 1.5rem;
         }
         .description {
-          font-size: 0.9375rem;
+          font-size: 1.125rem;
           margin-top: 2rem;
         }
         .topbar-nav {
@@ -586,30 +515,34 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
           padding: 0.5rem 0.75rem;
         }
         .topbar-link {
-          font-size: 0.6875rem;
+          font-size: 0.9375rem;
           padding: 0.25rem 0.5rem;
           white-space: normal;
           overflow-wrap: break-word;
           text-align: center;
         }
         .topbar-star {
-          width: 15px;
-          height: 15px;
+          width: 16px;
+          height: 16px;
         }
         .schedule {
           padding: 2.5rem 1.5rem 2.5rem;
         }
+        .schedule-heading {
+          font-size: 2.25rem;
+        }
         .schedule-day {
           margin-bottom: 2.25rem;
         }
-        .screening-title {
-          font-size: 1.125rem;
+        p.screening-title,
+        a.screening-title {
+          font-size: 2rem;
         }
         .footer-badge {
           max-width: 220px;
         }
         .footer-email {
-          font-size: 0.6875rem;
+          font-size: 0.9375rem;
           letter-spacing: 0.05em;
         }
       }
@@ -620,18 +553,53 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
           padding: 0.5rem 0.5rem;
         }
         .topbar-link {
-          font-size: 0.5625rem;
+          font-size: 0.75rem;
           letter-spacing: 0.05em;
           padding: 0.25rem 0.25rem;
         }
         .topbar-star {
-          width: 13px;
-          height: 13px;
+          width: 14px;
+          height: 14px;
         }
-        .festival-title {
-          font-size: 1.875rem;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .hero-carousel-slide {
+          transition: none;
         }
       }
     </style>
+
+    <script>
+      document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((carousel) => {
+        const slides = Array.from(carousel.querySelectorAll<HTMLElement>('.hero-carousel-slide'));
+        const dots = Array.from(carousel.querySelectorAll<HTMLElement>('.hero-carousel-dot'));
+        if (slides.length <= 1) return;
+
+        let index = 0;
+        let timer: ReturnType<typeof setInterval>;
+
+        function show(next: number) {
+          index = next;
+          slides.forEach((slide, i) => slide.setAttribute('data-active', String(i === index)));
+          dots.forEach((dot, i) => dot.setAttribute('data-active', String(i === index)));
+        }
+
+        function restart() {
+          clearInterval(timer);
+          timer = setInterval(() => show((index + 1) % slides.length), 5000);
+        }
+
+        dots.forEach((dot, i) => {
+          dot.addEventListener('click', () => {
+            show(i);
+            restart();
+          });
+        });
+
+        show(0);
+        restart();
+      });
+    </script>
   </body>
 </html>

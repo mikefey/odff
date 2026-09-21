@@ -26,27 +26,17 @@ const SITE_SETTINGS_QUERY = defineQuery(
       headerBadge { asset->{ _id, url }, alt, hotspot, crop }
     },
     hero {
-      dateRange,
-      location,
-      monogram { asset->{ _id, url }, alt, hotspot, crop },
-      title,
-      presentedBy,
-      heroImage { asset->{ _id, url }, alt, hotspot, crop },
-      heroHeading,
-      body,
-      botanicalIllustration { asset->{ _id, url }, alt, hotspot, crop }
-    },
-    ticketsBanner {
-      label,
-      linkLabel,
-      url
+      logo { asset->{ _id, url }, alt, hotspot, crop },
+      images[] { asset->{ _id, url }, alt, hotspot, crop },
+      body
     },
     schedule[] {
       dayLabel,
       screenings[] {
         time,
         title,
-        note
+        note,
+        url
       }
     },
     footer {
