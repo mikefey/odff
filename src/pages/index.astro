@@ -160,12 +160,12 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
 
       <section class="schedule">
         <h2 class="schedule-heading">Schedule</h2>
-        <div class="schedule-heading-rule"></div>
 
         {schedule.map((day: any) => (
           <div class="schedule-day">
+            <div class="schedule-rule schedule-rule-top"></div>
             <h3 class="schedule-day-label">{day.dayLabel}</h3>
-            <div class="schedule-day-rule"></div>
+            <div class="schedule-rule schedule-rule-bottom"></div>
 
             {day.screenings?.map((screening: any) => (
               <div class="screening">
@@ -390,22 +390,21 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
         font-weight: 400;
         font-size: 3rem;
         line-height: 0.94;
-        margin-bottom: 1.25rem;
-      }
-
-      .schedule-heading-rule {
-        width: 100%;
-        height: 1px;
-        background-color: var(--color-accent-red);
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
       }
 
       .schedule-day {
-        margin-bottom: 3rem;
+        margin-bottom: 0;
       }
 
-      .schedule-day:last-child {
-        margin-bottom: 0;
+      .schedule-rule {
+        width: 100%;
+        height: 2px;
+        background-color: var(--color-accent-red);
+      }
+
+      .schedule-rule-top {
+        margin-bottom: 1rem;
       }
 
       .schedule-day-label {
@@ -416,19 +415,12 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
         margin-bottom: 0.75rem;
       }
 
-      .schedule-day-rule {
-        width: 100%;
-        height: 1px;
-        background-color: var(--color-accent-red);
-        margin-bottom: 1.75rem;
+      .schedule-rule-bottom {
+        margin-bottom: 2.75rem;
       }
 
       .screening {
-        margin-bottom: 1.5rem;
-      }
-
-      .screening:last-child {
-        margin-bottom: 0;
+        margin-bottom: 3.5rem;
       }
 
       .screening-time {
@@ -436,7 +428,7 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
         font-weight: 400;
         font-size: 1.25rem;
         color: var(--color-accent-red);
-        margin-bottom: 0.35rem;
+        margin-bottom: 1.25rem;
       }
 
       p.screening-title,
@@ -455,7 +447,7 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
       }
 
       .screening-note {
-        margin-top: 0.35rem;
+        margin-top: 1.25rem;
         font-family: var(--font-tay);
         font-weight: 400;
         font-size: 1.25rem;
@@ -531,8 +523,17 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
         .schedule-heading {
           font-size: 2.25rem;
         }
-        .schedule-day {
+        .schedule-rule-bottom {
+          margin-bottom: 2rem;
+        }
+        .screening {
           margin-bottom: 2.25rem;
+        }
+        .screening-time {
+          margin-bottom: 1rem;
+        }
+        .screening-note {
+          margin-top: 1rem;
         }
         p.screening-title,
         a.screening-title {
