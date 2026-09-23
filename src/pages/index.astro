@@ -1,6 +1,7 @@
 ---
 import { getSiteSettings } from '../utils/sanity';
 import { PortableText } from 'astro-portabletext';
+import Analytics from '@vercel/analytics/astro';
 
 const settings = await getSiteSettings();
 
@@ -101,6 +102,7 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
     <meta name="twitter:title" content="Ojai Documentary Film Festival" />
     <meta name="twitter:description" content="The Ojai Documentary Film Festival Presented by Hotel El Roblar at the Ojai Playhouse Theater will take place October 27-30, bringing together visionary documentary films and series, in-person conversations, and experiences that invite audiences and filmmakers to connect." />
     <meta name="twitter:image" content="/odff-main-logo.png" />
+    <Analytics />
   </head>
   <body>
     <header class="topbar">

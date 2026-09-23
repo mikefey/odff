@@ -3,6 +3,7 @@ import { sanityClient } from 'sanity:client';
 import { defineQuery } from 'groq';
 import { PortableText } from 'astro-portabletext';
 import { getPostSlugs } from '../utils/sanity';
+import Analytics from '@vercel/analytics/astro';
 
 export async function getStaticPaths() {
   return await getPostSlugs();
@@ -23,6 +24,7 @@ const post = await sanityClient.fetch(POST_QUERY, { slug });
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{post?.title}</title>
+    <Analytics />
   </head>
   <body>
     <article>
