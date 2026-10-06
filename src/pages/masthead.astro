@@ -1,18 +1,10 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
-import { getSiteSettings } from '../utils/sanity';
+import { getMasthead } from '../utils/sanity';
 
-const settings = await getSiteSettings();
-
-const fallbackSections = [
-  { role: 'Founders', names: ['David Berger', 'Eric Goode', 'Jeremy McBride', 'Keith Ochwa', 'Emily Osborne'] },
-  { role: 'Curator', names: ['Daniel Forest'] },
-  { role: 'Art Direction', names: ['Kevin Devine', 'Lissa Rivera'] },
-];
-
-const masthead = settings?.masthead ?? {};
-const pageTitle = masthead.title || 'Masthead';
-const sections = masthead.sections?.length ? masthead.sections : fallbackSections;
+const masthead = await getMasthead();
+const pageTitle = masthead?.title || 'Masthead';
+const sections = masthead?.sections ?? [];
 ---
 
 <SiteLayout title={`${pageTitle} | Ojai Documentary Film Festival`}>

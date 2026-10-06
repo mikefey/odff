@@ -39,13 +39,6 @@ const SITE_SETTINGS_QUERY = defineQuery(
         url
       }
     },
-    masthead {
-      title,
-      sections[] {
-        role,
-        names
-      }
-    },
     footer {
       badgeLabel,
       badgeIllustration { asset->{ _id, url }, alt, hotspot, crop },
@@ -72,4 +65,18 @@ export async function getPostSlugs() {
 
 export async function getSiteSettings() {
   return await sanityClient.fetch(SITE_SETTINGS_QUERY);
+}
+
+const MASTHEAD_QUERY = defineQuery(
+  `*[_type == "masthead"][0]{
+    title,
+    sections[] {
+      role,
+      names
+    }
+  }`
+);
+
+export async function getMasthead() {
+  return await sanityClient.fetch(MASTHEAD_QUERY);
 }

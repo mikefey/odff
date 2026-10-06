@@ -115,25 +115,6 @@ export const siteSettings = defineType({
       of: [{ type: 'scheduleDay' }],
     }),
     defineField({
-      name: 'masthead',
-      title: 'Masthead',
-      type: 'object',
-      fields: [
-        defineField({
-          name: 'title',
-          title: 'Page Title',
-          type: 'string',
-          initialValue: 'Masthead',
-        }),
-        defineField({
-          name: 'sections',
-          title: 'Sections',
-          type: 'array',
-          of: [{ type: 'mastheadSection' }],
-        }),
-      ],
-    }),
-    defineField({
       name: 'footer',
       title: 'Footer',
       type: 'object',
