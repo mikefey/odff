@@ -1,0 +1,64 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+
+const sections = [
+  { role: 'Founders', names: ['David Berger', 'Eric Goode', 'Jeremy McBride', 'Keith Ochwa', 'Emily Osborne'] },
+  { role: 'Curator', names: ['Daniel Forest'] },
+  { role: 'Art Direction', names: ['Kevin Devine', 'Lissa Rivera'] },
+];
+---
+
+<SiteLayout title="Masthead | Ojai Documentary Film Festival">
+  <section class="masthead">
+    <h1 class="masthead-heading">Masthead</h1>
+
+    {sections.map((section) => (
+      <div class="masthead-group">
+        <div class="schedule-rule schedule-rule-top"></div>
+        <h2 class="masthead-role">{section.role}</h2>
+        <div class="schedule-rule schedule-rule-bottom"></div>
+        <ul class="masthead-names">
+          {section.names.map((name) => (
+            <li>{name}</li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </section>
+</SiteLayout>
+
+<style>
+  .masthead {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 3.5rem 2rem 3.5rem;
+    text-align: center;
+  }
+
+  .masthead-heading {
+    font-family: var(--font-condensed);
+    font-weight: 400;
+    font-size: 3rem;
+    line-height: 0.94;
+    margin-bottom: 1rem;
+  }
+
+  .masthead-role {
+    font-family: var(--font-tay);
+    font-weight: 400;
+    font-size: 1.25rem;
+    color: var(--color-accent-red);
+    margin-bottom: 0.75rem;
+  }
+
+  .masthead-group {
+    margin-bottom: 1rem;
+  }
+
+  .masthead-names {
+    list-style: none;
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    line-height: 1.4;
+  }
+</style>
