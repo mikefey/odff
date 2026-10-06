@@ -85,7 +85,9 @@ const contactEmail = footer.contactEmail || 'CONNECT@OJAIDOCUMENTARYFILMFESTIVAL
     </main>
 
     <footer class="site-footer">
-      <img src={badgeIllustrationUrl} alt={badgeIllustrationAlt} class="footer-badge" />
+      <a href="/" class="footer-home" aria-label="Home">
+        <img src={badgeIllustrationUrl} alt={badgeIllustrationAlt} class="footer-badge" />
+      </a>
 
       {contactEmail ? (
         <a href={`mailto:${contactEmail}`} class="footer-email">{contactLabel}</a>
@@ -413,6 +415,10 @@ const contactEmail = footer.contactEmail || 'CONNECT@OJAIDOCUMENTARYFILMFESTIVAL
       .site-footer {
         padding: 3rem 1.5rem 3.5rem;
         text-align: center;
+      }
+
+      .footer-home {
+        display: block;
       }
 
       .footer-badge {
