@@ -13,7 +13,8 @@ const buyTicketsLabel = header.buyTicketsLabel || 'BUY TICKETS';
 const buyTicketsUrl = header.buyTicketsUrl || 'https://www.ojaiplayhouse.com/';
 const bookRoomLabel = header.bookRoomLabel || 'BOOK A ROOM';
 const bookRoomUrl = header.bookRoomUrl || 'https://atpscan.msp.proofpoint.com/?d=07Me8axVNsYk14ERKBvxeXiB1MsKOQv_ekiQVzyiG9c&f=kmGL3MVNdE_ZQJCeFO4bk3OwxLd3v1iH0IOFs71AdBsrvGdTAdZzdxIH8QHZHdA1&i=&k=BS91&m=B9f9yOjQQUHyzE-eH4lupq3S3yDBPIeqe4LhgLxjfdjZ5QF54yNFK2ZhjLRZ-jysTQh_6PHZn2qhdCKZHbmMXG5Zeqy3WyPEpbX6rVLBSwDTGN8G4hERP0GDdb7lwKol&n=Iu9xyHUa3erwK-N2Cwt_REhi0QLCQAvmvw9hdJkL8M_7eZn4l8a8F9S2H7boX3CQ&r=m3m76g3BcQaTRTnOYIIQpLo9Fyt5_YL480r-VfI214U-vrj8vwXjYXyOcgdjCC4B&s=42962907a272afd69fd225ef29f46e7099cb332dd69bd1b4a854a3131fbead4f&u=https%3A%2F%2Fbe.synxis.com%2F%3F%26amp%3Bchain%3D24447%26amp%3Bhotel%3D98714%26amp%3BSRC%3D30%26amp%3Bpromo%3DODFF%26amp%3Barrive%3D2026-10-27%26amp%3Bnights%3D1';
-const headerBadgeUrl = header.headerBadge?.asset?.url || '/star-icon.png';
+const capriRoomUrl = 'https://app.mews.com/distributor/ab121400-7d85-4aee-8dc2-b25f00f18a75?mewsVoucherCode=ODFF30';
+const headerBadgeUrl =header.headerBadge?.asset?.url || '/star-icon.png';
 const headerBadgeAlt = header.headerBadge?.alt || '';
 
 const logoUrl = hero.logo?.asset?.url || '/odff-main-logo.png';
@@ -117,13 +118,21 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
 
         <img src={headerBadgeUrl} alt={headerBadgeAlt} class="topbar-star" aria-hidden={!headerBadgeAlt} />
 
-        {bookRoomUrl ? (
-          <a href={bookRoomUrl} class="topbar-link" target="_blank" rel="noopener">
+        <div class="topbar-dropdown" data-dropdown>
+          <button type="button" class="topbar-link topbar-dropdown-toggle" aria-expanded="false" aria-controls="book-room-menu">
             {bookRoomLabel}
-          </a>
-        ) : (
-          <span class="topbar-link">{bookRoomLabel}</span>
-        )}
+          </button>
+          <div class="topbar-menu" id="book-room-menu" hidden>
+            {bookRoomUrl && (
+              <a href={bookRoomUrl} class="topbar-link topbar-menu-link" target="_blank" rel="noopener">
+                Hotel El Roblar
+              </a>
+            )}
+            <a href={capriRoomUrl} class="topbar-link topbar-menu-link" target="_blank" rel="noopener">
+              Capri Hotel
+            </a>
+          </div>
+        </div>
       </nav>
     </header>
 
@@ -299,6 +308,38 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
         height: 22px;
         flex-shrink: 0;
         object-fit: contain;
+      }
+
+      .topbar-dropdown {
+        position: relative;
+      }
+
+      .topbar-dropdown-toggle {
+        background: none;
+        border: 0;
+        cursor: pointer;
+      }
+
+      .topbar-menu {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        min-width: 100%;
+        background-color: var(--color-accent-red);
+      }
+
+      .topbar-menu[hidden] {
+        display: none;
+      }
+
+      .topbar-menu-link {
+        display: block;
+        text-align: center;
+        padding: 0.5rem 1.25rem;
       }
 
       /* Festival logo */
@@ -583,6 +624,25 @@ const schedule = settings?.schedule?.length ? settings.schedule : fallbackSchedu
     </style>
 
     <script>
+      document.querySelectorAll<HTMLElement>('[data-dropdown]').forEach((dropdown) => {
+        const toggle = dropdown.querySelector<HTMLButtonElement>('.topbar-dropdown-toggle');
+        const menu = dropdown.querySelector<HTMLElement>('.topbar-menu');
+        if (!toggle || !menu) return;
+
+        function setOpen(open: boolean) {
+          menu!.hidden = !open;
+          toggle!.setAttribute('aria-expanded', String(open));
+        }
+
+        toggle.addEventListener('click', () => setOpen(menu.hidden));
+        document.addEventListener('click', (event) => {
+          if (!dropdown.contains(event.target as Node)) setOpen(false);
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') setOpen(false);
+        });
+      });
+
       document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((carousel) => {
         const slides = Array.from(carousel.querySelectorAll<HTMLElement>('.hero-carousel-slide'));
         const dots = Array.from(carousel.querySelectorAll<HTMLElement>('.hero-carousel-dot'));
