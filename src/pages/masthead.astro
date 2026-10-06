@@ -1,16 +1,23 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+import { getSiteSettings } from '../utils/sanity';
 
-const sections = [
+const settings = await getSiteSettings();
+
+const fallbackSections = [
   { role: 'Founders', names: ['David Berger', 'Eric Goode', 'Jeremy McBride', 'Keith Ochwa', 'Emily Osborne'] },
   { role: 'Curator', names: ['Daniel Forest'] },
   { role: 'Art Direction', names: ['Kevin Devine', 'Lissa Rivera'] },
 ];
+
+const masthead = settings?.masthead ?? {};
+const pageTitle = masthead.title || 'Masthead';
+const sections = masthead.sections?.length ? masthead.sections : fallbackSections;
 ---
 
-<SiteLayout title="Masthead | Ojai Documentary Film Festival">
+<SiteLayout title={`${pageTitle} | Ojai Documentary Film Festival`}>
   <section class="masthead">
-    <h1 class="masthead-heading">Masthead</h1>
+    <h1 class="masthead-heading">{pageTitle}</h1>
 
     {sections.map((section) => (
       <div class="masthead-group">

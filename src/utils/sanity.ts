@@ -39,6 +39,13 @@ const SITE_SETTINGS_QUERY = defineQuery(
         url
       }
     },
+    masthead {
+      title,
+      sections[] {
+        role,
+        names
+      }
+    },
     footer {
       badgeLabel,
       badgeIllustration { asset->{ _id, url }, alt, hotspot, crop },
