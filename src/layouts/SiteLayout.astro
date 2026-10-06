@@ -89,11 +89,14 @@ const contactEmail = footer.contactEmail || 'CONNECT@OJAIDOCUMENTARYFILMFESTIVAL
         <img src={badgeIllustrationUrl} alt={badgeIllustrationAlt} class="footer-badge" />
       </a>
 
-      {contactEmail ? (
-        <a href={`mailto:${contactEmail}`} class="footer-email">{contactLabel}</a>
-      ) : (
-        <span class="footer-email">{contactLabel}</span>
-      )}
+      <nav class="footer-links">
+        {contactEmail ? (
+          <a href={`mailto:${contactEmail}`} class="footer-email">{contactLabel}</a>
+        ) : (
+          <span class="footer-email">{contactLabel}</span>
+        )}
+        <a href="/masthead" class="footer-email">Masthead</a>
+      </nav>
     </footer>
 
     <style is:global>
@@ -430,23 +433,26 @@ const contactEmail = footer.contactEmail || 'CONNECT@OJAIDOCUMENTARYFILMFESTIVAL
         margin: 0 auto 1.5rem;
       }
 
+      .footer-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2.5rem;
+      }
+
       .footer-email {
         font-family: var(--font-tay);
         font-weight: 400;
-        font-size: 1.375rem;
+        font-size: 1.125rem;
         letter-spacing: 0.1em;
         color: var(--color-text);
-        text-decoration-line: underline;
-        text-decoration-style: solid;
-        text-decoration-skip-ink: auto;
-        text-decoration-thickness: auto;
-        text-underline-offset: auto;
-        text-underline-position: from-font;
+        text-decoration: none;
         transition: color 0.2s ease-out;
       }
 
       a.footer-email:hover {
         color: var(--color-accent-red);
+        text-decoration: underline;
       }
 
       @media (max-width: 640px) {
