@@ -58,7 +58,9 @@ const contactEmail = footer.contactEmail || 'CONNECT@OJAIDOCUMENTARYFILMFESTIVAL
           <span class="topbar-link">{buyTicketsLabel}</span>
         )}
 
-        <img src={headerBadgeUrl} alt={headerBadgeAlt} class="topbar-star" aria-hidden={!headerBadgeAlt} />
+        <a href="/" class="topbar-home" aria-label="Home">
+          <img src={headerBadgeUrl} alt={headerBadgeAlt} class="topbar-star" aria-hidden={!headerBadgeAlt} />
+        </a>
 
         <div class="topbar-dropdown" data-dropdown>
           <button type="button" class="topbar-link topbar-dropdown-toggle" aria-expanded="false" aria-controls="book-room-menu">
@@ -186,6 +188,10 @@ const contactEmail = footer.contactEmail || 'CONNECT@OJAIDOCUMENTARYFILMFESTIVAL
 
       a.topbar-link:hover {
         color: var(--color-cream);
+      }
+
+      .topbar-home {
+        display: flex;
       }
 
       .topbar-star {
